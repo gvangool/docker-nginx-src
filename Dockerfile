@@ -17,9 +17,11 @@ ENV NGINX_VERSION 1.4.4
 
 # Nginx
 RUN cd /usr/src/ && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && tar xf nginx-${NGINX_VERSION}.tar.gz && rm -f nginx-${NGINX_VERSION}.tar.gz
+# Extra modules
 ADD modules /usr/src/nginx-modules/
+ENV MODULESDIR /usr/src/nginx-modules
 # Compiling nginx
-RUN cd /usr/src/nginx-${NGINX_VERSION} && MODULESDIR=/usr/src/nginx-modules ./configure \
+RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
         --prefix=/etc/nginx \
         --conf-path=/etc/nginx/nginx.conf \
         --error-log-path=/var/log/nginx/error.log \
@@ -45,19 +47,20 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && MODULESDIR=/usr/src/nginx-modules ./co
         --with-ipv6 \
         --with-sha1=/usr/include/openssl \
         --with-md5=/usr/include/openssl \
-        #--add-module=$(MODULESDIR)/chunkin-nginx-module \
-        #--add-module=$(MODULESDIR)/headers-more-nginx-module \
-        #--add-module=$(MODULESDIR)/naxsi/naxsi_src \
-        --add-module=$(MODULESDIR)/nginx-auth-pam \
-        --add-module=$(MODULESDIR)/nginx-cache-purge \
-        #--add-module=$(MODULESDIR)/nginx-dav-ext-module \
-        #--add-module=$(MODULESDIR)/nginx-development-kit \
-        --add-module=$(MODULESDIR)/nginx-echo \
-        #--add-module=$(MODULESDIR)/nginx-http-push \
-        #--add-module=$(MODULESDIR)/nginx-lua \
-        #--add-module=$(MODULESDIR)/nginx-upload-module \
-        #--add-module=$(MODULESDIR)/nginx-upload-progress \
-        --add-module=$(MODULESDIR)/nginx-upstream-fair
+        --add-module=${MODULESDIR}/nginx-auth-pam \
+        --add-module=${MODULESDIR}/nginx-cache-purge \
+        --add-module=${MODULESDIR}/nginx-echo \
+        --add-module=${MODULESDIR}/nginx-upstream-fair
+# Other possible modules
+#--add-module=${MODULESDIR}/chunkin-nginx-module \
+#--add-module=${MODULESDIR}/headers-more-nginx-module \
+#--add-module=${MODULESDIR}/naxsi/naxsi_src \
+#--add-module=${MODULESDIR}/nginx-dav-ext-module \
+#--add-module=${MODULESDIR}/nginx-development-kit \
+#--add-module=${MODULESDIR}/nginx-http-push \
+#--add-module=${MODULESDIR}/nginx-lua \
+#--add-module=${MODULESDIR}/nginx-upload-module \
+#--add-module=${MODULESDIR}/nginx-upload-progress \
 RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make install
 
 ADD nginx /etc/nginx/
