@@ -63,4 +63,4 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make install
 ADD nginx /etc/nginx/
 
 EXPOSE 80 443
-ENTRYPOINT ["nginx"]
+CMD ["nginx"]
