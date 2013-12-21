@@ -45,6 +45,7 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
         --with-http_sub_module \
         --with-http_xslt_module \
         --with-ipv6 \
+        --with-debug \
         --with-sha1=/usr/include/openssl \
         --with-md5=/usr/include/openssl \
         --add-module=${MODULESDIR}/nginx-auth-pam \
