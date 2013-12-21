@@ -64,6 +64,8 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
 #--add-module=${MODULESDIR}/nginx-upload-progress
 
 RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make install
+# Create the /var/lib/nginx directory (for temp paths)
+RUN mkdir -p /var/lib/nginx
 
 ADD nginx /etc/nginx/
 
