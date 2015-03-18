@@ -11,7 +11,10 @@ RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main restricted universe\ndeb-src http://archive.ubuntu.com/ubuntu trusty main restricted universe\ndeb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe\ndeb-src http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe\n" > /etc/apt/sources.list
 
 # Install build tools for nginx
-RUN apt-get update && apt-get build-dep nginx-full -y && apt-get install wget -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install build-essential wget -y && \
+    apt-get build-dep nginx-full -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV NGINX_VERSION 1.4.4
 
