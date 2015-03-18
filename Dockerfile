@@ -16,7 +16,7 @@ RUN apt-get update && \
     apt-get build-dep nginx-full -y && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV NGINX_VERSION 1.4.4
+ENV NGINX_VERSION 1.6.2
 
 # Nginx
 RUN cd /usr/src/ && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && tar xf nginx-${NGINX_VERSION}.tar.gz && rm -f nginx-${NGINX_VERSION}.tar.gz
