@@ -1,4 +1,4 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER Gert Van Gool <gert@vangool.mx>
 
 # Set the env variable DEBIAN_FRONTEND to noninteractive
@@ -8,10 +8,13 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
 # Enable universe & src repo's
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe\ndeb-src http://archive.ubuntu.com/ubuntu precise main restricted universe\ndeb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe\ndeb-src http://archive.ubuntu.com/ubuntu precise-updates main restricted universe\n" > /etc/apt/sources.list 
+RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main restricted universe\ndeb-src http://archive.ubuntu.com/ubuntu trusty main restricted universe\ndeb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe\ndeb-src http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe\n" > /etc/apt/sources.list
 
 # Install build tools for nginx
-RUN apt-get update && apt-get build-dep nginx-full -y && apt-get install wget -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install build-essential wget -y && \
+    apt-get build-dep nginx-full -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV NGINX_VERSION 1.4.4
 
@@ -64,6 +67,8 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
 #--add-module=${MODULESDIR}/nginx-upload-progress
 
 RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make install
+# Create the /var/lib/nginx directory (for temp paths)
+RUN mkdir -p /var/lib/nginx
 
 ADD nginx /etc/nginx/
 
